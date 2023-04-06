@@ -32,7 +32,7 @@ jobs:
         repository: 'Rice-COMP-310/s23-chatapp-comp310-s23-chatapp-05'
         path: 'java'
         submodules: 'recursive'
-        ref: 'main'
+        ref: 'MS1'
         token: ${{ secrets.TOKEN }}
     - name: Generate Javadoc
       run: javadoc -encoding UTF-8 -docletpath ./docfx-doclet-1.0-SNAPSHOT-jar-with-dependencies.jar -doclet com.microsoft.doclet.DocFxDoclet -sourcepath ./java/src -outputpath ./api -subpackages common
