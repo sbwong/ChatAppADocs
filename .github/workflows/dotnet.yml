@@ -29,10 +29,11 @@ jobs:
     - name: Checkout Java
       uses: actions/checkout@v3
       with:
-        repository: 'https://github.com/Rice-COMP-310/s23-chatapp-comp310-s23-chatapp-05.git'
+        repository: 'Rice-COMP-310/s23-chatapp-comp310-s23-chatapp-05'
         path: 'java'
         submodules: 'recursive'
         ref: 'main'
+        token: ${{ secrets.TOKEN }}
     - name: Generate Javadoc
       run: javadoc -encoding UTF-8 -docletpath ./docfx-doclet-1.0-SNAPSHOT-jar-with-dependencies.jar -doclet com.microsoft.doclet.DocFxDoclet -sourcepath ./java/src -outputpath ./api -subpackages common
     - name: Setup .NET
