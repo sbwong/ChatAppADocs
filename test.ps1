@@ -1,0 +1,1 @@
+C:\Users\jlync\.jdks\openjdk-19.0.1\bin\javadoc.exe -encoding UTF-8 -docletpath ./docfx-doclet-1.0-SNAPSHOT-jar-with-dependencies.jar -doclet com.microsoft.doclet.DocFxDoclet -sourcepath ../s23-chatapp-comp310-s23-chatapp-05/src -outputpath ./api -subpackages common

@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Class CommandMessage
+ </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Class CommandMessage
+ ">
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="../toc.html">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="common.message.room.CommandMessage">
+
+
+
+  <h1 id="common_message_room_CommandMessage" data-uid="common.message.room.CommandMessage" class="text-break">Class CommandMessage
+</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">Object</span></div>
+    <div class="level1"><span class="xref">CommandMessage</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="common.message.room.ICommandMessage.html">ICommandMessage</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Object.clone()</span>
+    </div>
+    <div>
+      <span class="xref">Object.equals(Object)</span>
+    </div>
+    <div>
+      <span class="xref">Object.finalize()</span>
+    </div>
+    <div>
+      <span class="xref">Object.getClass()</span>
+    </div>
+    <div>
+      <span class="xref">Object.hashCode()</span>
+    </div>
+    <div>
+      <span class="xref">Object.notify()</span>
+    </div>
+    <div>
+      <span class="xref">Object.notifyAll()</span>
+    </div>
+    <div>
+      <span class="xref">Object.toString()</span>
+    </div>
+    <div>
+      <span class="xref">Object.wait()</span>
+    </div>
+    <div>
+      <span class="xref">Object.wait(long)</span>
+    </div>
+    <div>
+      <span class="xref">Object.wait(long,int)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: </h6>
+  <h6><strong>Assembly</strong>: .dll</h6>
+  <h5 id="common_message_room_CommandMessage_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public final class CommandMessage implements ICommandMessage</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+
+
+  <a id="common_message_room_CommandMessage_CommandMessage_" data-uid="common.message.room.CommandMessage.CommandMessage*"></a>
+  <h4 id="common_message_room_CommandMessage_CommandMessage_provided_datapacket_IDataPacketID_common_room_ARoomMessageAlgoCmd____" data-uid="common.message.room.CommandMessage.CommandMessage(provided.datapacket.IDataPacketID,common.room.ARoomMessageAlgoCmd&lt;?&gt;)">CommandMessage(IDataPacketID commandId, ARoomMessageAlgoCmd&lt;?&gt; command)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the CommandMessage class</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CommandMessage(IDataPacketID commandId, ARoomMessageAlgoCmd&lt;?&gt; command)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IDataPacketID</span></td>
+        <td><span class="parametername">commandId</span></td>
+        <td><p>The id of the message this command is for</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="common.room.ARoomMessageAlgoCmd.html">ARoomMessageAlgoCmd</a>&lt;<span class="xref">?</span>&gt;</td>
+        <td><span class="parametername">command</span></td>
+        <td><p>The command to execute for messages with id commandId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+
+
+  <a id="common_message_room_CommandMessage_equals_" data-uid="common.message.room.CommandMessage.equals*"></a>
+  <h4 id="common_message_room_CommandMessage_equals_java_lang_Object_" data-uid="common.message.room.CommandMessage.equals(java.lang.Object)">equals(Object obj)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public boolean equals(Object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">java.lang.Object.equals(java.lang.Object)</span></div>
+
+
+  <a id="common_message_room_CommandMessage_getID_" data-uid="common.message.room.CommandMessage.getID*"></a>
+  <h4 id="common_message_room_CommandMessage_getID__" data-uid="common.message.room.CommandMessage.getID()">getID()</h4>
+  <div class="markdown level1 summary"><p>Get the host ID value associated with the specific implementing data type. This method should be overridden with a default method by the INTERFACE defining the data type.</p>
+<p>NEVER subsequently override the defined default method! Unfortunately, Java has no syntax for defining an invariant method at the interface level. That default method represents the invariant ID value that is associated with the data type defined by the interface it is defined on.</p>
+<p>Since an instance method, such as a default method, can delegate to a static method but not the other way around, the implementation of getID() should simply delegate to the interface's static GetID() method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDataPacketID getID()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IDataPacketID</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="common_message_room_CommandMessage_getMessageCommand_" data-uid="common.message.room.CommandMessage.getMessageCommand*"></a>
+  <h4 id="common_message_room_CommandMessage_getMessageCommand__" data-uid="common.message.room.CommandMessage.getMessageCommand()">getMessageCommand()</h4>
+  <div class="markdown level1 summary"><p>Getter for the actual command stored in this message.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ARoomMessageAlgoCmd&lt;?&gt; getMessageCommand()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="common.room.ARoomMessageAlgoCmd.html">ARoomMessageAlgoCmd</a>&lt;<span class="xref">?</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="common_message_room_CommandMessage_getPacketID_" data-uid="common.message.room.CommandMessage.getPacketID*"></a>
+  <h4 id="common_message_room_CommandMessage_getPacketID__" data-uid="common.message.room.CommandMessage.getPacketID()">getPacketID()</h4>
+  <div class="markdown level1 summary"><p>Getter for the ID of the message associated with the command.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDataPacketID getPacketID()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IDataPacketID</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <a id="common_message_room_CommandMessage_hashCode_" data-uid="common.message.room.CommandMessage.hashCode*"></a>
+  <h4 id="common_message_room_CommandMessage_hashCode__" data-uid="common.message.room.CommandMessage.hashCode()">hashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int hashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">int</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">java.lang.Object.hashCode()</span></div>
+
+
+  <a id="common_message_room_CommandMessage_toString_" data-uid="common.message.room.CommandMessage.toString*"></a>
+  <h4 id="common_message_room_CommandMessage_toString__" data-uid="common.message.room.CommandMessage.toString()">toString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public String toString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">java.lang.Object.toString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="common.message.room.ICommandMessage.html">ICommandMessage</a>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
