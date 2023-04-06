@@ -1,2 +1,2 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+# Chatapp A Documentation
+Use the sidebar to navigate through API docs, or follow the [Getting Started Guide](../articles/getstarted.md)
