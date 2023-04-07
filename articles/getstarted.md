@@ -54,7 +54,7 @@ remoteNamedConnection.getConnection().receiveMessage(
 ```
 
 > [!WARNING]
-> Make sure every <xref:common.connection.INamedConnection>, including the sender is an RMI **stub** not server! Otherwise you'll get some nasty `NotSerializableException`s
+> Make sure every <xref:common.connection.INamedConnection>, including the sender, contains RMI **stub** `IConnections`! Otherwise you'll get some nasty `NotSerializableException`s
 
 ## Getting connected to
 Then, to handle this <xref:common.message.connection.IConnectionsMessage>, just add a command in your visitor which adds all the connections you receive to the model's set of connections.
