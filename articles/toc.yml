@@ -1,9 +1,9 @@
 - name: Getting Started Guide
   uid: getstarted
   href: getstarted.md
-- name: Sample ICmd2LocalSystemAdapter factory
+- name: Sample ICmd2LocalSystemAdapter Factory
   href: sampleadapterfactory.md
 - name: Sample Unknown Message Type
-  href: sampleadapterfactory.md
+  href: unknownsample.md
 - name: ITextMessage as an Unknown Message
   href: textmessageunknown.md

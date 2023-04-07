@@ -1,3 +1,4 @@
+# Sample ICmd2LocalSystemAdapter Factory
 Here's a simple example of how you could pass an <xref:common.room.ICmd2LocalSystemAdapter> factory to a <xref:common.room.RoomDataPacketAlgo>. Each method on the `viewAdapter` takes in a String representing the sender's name.
 
 ```java

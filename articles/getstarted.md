@@ -219,13 +219,13 @@ this.setCmd(ITextMessage.ID, new ARoomMessageAlgoCmd<>() {
 > [!TIP]
 > Alternatively, you could pretend that `ITextMessage` was an unknown type and add it to the list of visitor commands that way. See [ITextMessage as an Unknown Message](./textmessageunknown.md) for an example.
 
-### <xref:common.message.room.IQuitMessage>
+### <xref:common.message.room.IQuitRoomMessage>
 This message is sent whenever someone has left the room. Simply delegate to your model adapter for processing, e.g
 
 ```java
-this.setCmd(IQuitMessage.ID, new SimpleRoomCmd<IQuitMessage>() {
+this.setCmd(IQuitRoomMessage.ID, new SimpleRoomCmd<IQuitRoomMessage>() {
     @Override
-    public void execute(IQuitMessage data, INamedMessageReceiver sender, ICmd2LocalSystemAdapter a) {
+    public void execute(IQuitRoomMessage data, INamedMessageReceiver sender, ICmd2LocalSystemAdapter a) {
         adapter.removeUserFromRoom(sender);
     }
 });
@@ -303,7 +303,7 @@ sender.receiveMessage(
 
 
 > [!NOTE]
-> If a message asks for the command for a well-known message type, you should respond with an <xref:common.message.room.IRejectRoom> message.
+> If a message asks for the command for a well-known message type, you should respond with an <xref:common.message.room.IRejectRoomMessage> message.
 
 > [!TIP]
 > You might consider making a big `LocalMessageStore` at the main model level that you can add and get <xref:common.room.ARoomMessageAlgoCmd>s from. Then, just pass this class to the mini-model and it's easy to lookup messages when clients ask for them!
@@ -366,8 +366,8 @@ Certain well-known status messages exist to help keep apps updated about potenti
 
 | Message                   | Description                        | Recommended Action |
 |---------------------------|------------------------------------|--------------------|
-|`IRejectRoomMessage`       | Sent when the command for a well-known message type is requested | Hardcode a visitor cmd for the message ID |
-|`IErrorConnectionMessage`  | Sent when there was an error processing a connection-level message | Send the message again, but only so many times |
-|`IRejectConnectionMessage` | Sent when the remote refuses to process a sent message | Give up on whatever action you were trying to perform |
+|<xref:common.message.room.IRejectRoomMessage>  | Sent when the command for a well-known message type is requested | Hardcode a visitor cmd for the message ID |
+|<xref:common.message.connection.IErrorConnectionMessage>  | Sent when there was an error processing a connection-level message | Send the message again, but only so many times |
+|<xref:common.message.connection.IRejectConnectionMessage> | Sent when the remote refuses to process a sent message | Give up on whatever action you were trying to perform |
 
 ## Tips and Traps
