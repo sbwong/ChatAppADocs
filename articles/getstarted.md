@@ -6,18 +6,11 @@ Your first step on the path to chatting is setting up your connections so that y
 
 This takes place in a couple steps:
 ### Create your <xref:common.connection.IConnection> implementation.
-IConnection is the object that will receive all high-level, non-room specific communications from other apps. It has two methods you should override. One, `receiveMessage`, which will be called whenever another app sends you a message. Another, `setConnection` which will send you the <xref:common.connection.INamedConnection> of another party, establishing auto-connect back functionality. Here's what your implementation might look like:
+IConnection is the object that will receive all high-level, non-room specific communications from other apps. It has a single method you should override, `receiveMessage`, which will be called whenever another app sends you a message. Here's what your implementation might look like:
 
 ```java
 public class AppConnection implements IConnection {
-    
     // ...
-
-    @Override
-    public void setConnection(INamedConnection remote) {
-        // we received another connection, add it to our list!
-        adapter.addConnection(remote);
-    }
 
     @Override
     public void receiveMessage(ConnectionDataPacket<? extends IConnectionMessage> message) throws RemoteException {
@@ -26,6 +19,9 @@ public class AppConnection implements IConnection {
     }
 }
 ```
+
+> [!WARNING]
+> This guide simply uses `message.execute` for demonstration purposes. You should spin up a new thread/process the message asynchronously!
 
 ### Creating the Named Connection
 So that other apps can find your name easily, you have to wrap your <xref:common.connection.IConnection> in an <xref:common.connection.INamedConnection>. This is a simple `String`, `IConnection` dyad. However, the `IConnection` this `INamedConnection` holds must be an RMI stub obtained from your IConnection instance above.
@@ -43,7 +39,55 @@ IInitialConnection initialConnection = () -> myNamedConnection;
 Then, create a stub from that initialConnection, and add it to the RMI registry. Now, others can connect to your app via the provided [Discovery Server](https://canvas.rice.edu/courses/57240/pages/using-the-discovery-server-package).
 
 ## Connecting to another instance
-Once you receive an <xref:common.connection.IInitialConnection> stub from another machine, either via the Discovery Server or manual IP connection, save it in a list of connected apps somewhere. It will let you invite that app to a chatroom.
+Once you receive an <xref:common.connection.IInitialConnection> stub from another machine, either via the Discovery Server or manual IP connection, save it in a list of connected apps somewhere. It will let you invite that app to a chatroom. Next you should connect back!
+
+## Connecting back
+To connect back to an <xref:common.connection.IInitialConnection>, send it an <xref:common.message.connection.IConnectionsMessage> containing your own connection, plus every other <xref:common.connection.INamedConnection> you have. That way the remote app can develop a fully connected graph of connections.
+
+```java
+remoteNamedConnection.getConnection().receiveMessage(
+    new ConnectionDataPacket<>(
+        new ConnectionsMessage(myConnections), // the message
+        this.namedConnection // the sender -- our named connection!
+    )
+);
+```
+
+> [!WARNING]
+> Make sure every <xref:common.connection.INamedConnection>, including the sender is an RMI **stub** not server! Otherwise you'll get some nasty `NotSerializableException`s
+
+## Getting connected to
+Then, to handle this <xref:common.message.connection.IConnectionsMessage>, just add a command in your visitor which adds all the connections you receive to the model's set of connections.
+
+```java
+this.setCmd(IConnectionsMessage.ID, new SimpleConnectionCmd<IConnectionsMessage>() {
+    @Override
+    public void execute(IConnectionsMessage data, INamedConnection sender) {
+        adapter.addConnections(data.getConnections(), sender);
+    }
+});
+```
+
+This is also a good time to provide your set of connections too. Your model should compare the received list to its own, and, if it has any connections not in the list given, will send an IConnectionsMessage with all of its connections:
+
+```java
+private void addConnections(HashSet<INamedConnection> connections, INamedConnection sender) {
+    // find any connections we have that aren't the sender and the sender doesn't have
+    Set<INamedConnection> addlConnections = myConnections.stream().filter(c -> !c.equals(sender) && !connections.contains(c)).collect(Collectors.toSet());
+
+    if (addlConnections.isEmpty()) return;
+
+    // then, provide those back to the sender
+    sender.getConnection().receiveMessage(
+        new ConnectionDataPacket<>(
+            new ConnectionsMessage(new HashSet<>(addlConnections)),
+            this.namedConnection
+        )
+    );
+}
+```
+
+Doing this will ensure that everyone has the same set of people to chat with.
 
 ## Getting into a chatroom
 To actually chat with people, you should be in a chatroom! There are two ways to get into one: either create it yourself, or get invited into it. This section covers both approaches. 
@@ -144,8 +188,51 @@ this.pubSubChatroomChannel.update(old -> {
 
 Great! You've now joined the chatroom and are ready to receive messages through your <xref:common.room.RoomDataPacketAlgo> visitor. Speaking of...
 
-### Handling Well-Known Messages
-**TODO** state of well-known messages is, well, unknown.
+## Handling Well-Known Messages
+There are only two room-level well known message types you should handle.
+
+### <xref:common.message.room.ITextMessage>
+An <xref:common.message.room.ITextMessage> represents a simple string message.
+You can send an <xref:common.message.room.ITextMessage> using the convenience class <xref:common.message.room.TextMessage>:
+```java
+for (IMessageReceiver target : roster) {
+    target.getMessageReceiver().receiveMessage(
+        new RoomDataPacket<>(
+            new TextMessage("Hello World!"),
+            this.namedMessageReceiver
+        )
+    );
+}
+```
+
+Then, simply process the message on your visitor:
+```java
+this.setCmd(ITextMessage.ID, new ARoomMessageAlgoCmd<>() {
+    @Override
+    public Void apply(IDataPacketID index, RoomDataPacket<IRoomMessage> host, Void... params) {
+        adapter.writeText(host.getSender(), host.getData().getText());
+        return null;
+    }
+});
+```
+
+> [!TIP]
+> Alternatively, you could pretend that `ITextMessage` was an unknown type and add it to the list of visitor commands that way. See [ITextMessage as an Unknown Message](./textmessageunknown.md) for an example.
+
+### <xref:common.message.room.IQuitMessage>
+This message is sent whenever someone has left the room. Simply delegate to your model adapter for processing, e.g
+
+```java
+this.setCmd(IQuitMessage.ID, new SimpleRoomCmd<IQuitMessage>() {
+    @Override
+    public void execute(IQuitMessage data, INamedMessageReceiver sender, ICmd2LocalSystemAdapter a) {
+        adapter.removeUserFromRoom(sender);
+    }
+});
+```
+
+> [!NOTE]
+> For other well-known message types, see [Status Messages](#status-messages) below.
 
 ## Unknown Messages
 Your <xref:common.room.RoomDataPacketAlgo> needs a couple things to start handling unknown messages properly. 
@@ -190,6 +277,9 @@ sender.receiveMessage(
 ### Sending Your Message Commands Back
 Oh no! Someone has requested a message command! What do you do?! Fear not, it's pretty simple!
 
+> [!TIP]
+> If you want an example of implementing an unknown message, look [here](./unknownsample.md).
+
 First, make sure you handle the message in your visitor. This example uses the provided convenience class <xref:common.room.SimpleRoomCmd>: 
 ```java
 this.setCmd(ICommandRequestMessage.ID, new SimpleRoomCmd<ICommandRequestMessage>() {
@@ -211,6 +301,10 @@ sender.receiveMessage(
 );
 ```
 
+
+> [!NOTE]
+> If a message asks for the command for a well-known message type, you should respond with an <xref:common.message.room.IRejectRoom> message.
+
 > [!TIP]
 > You might consider making a big `LocalMessageStore` at the main model level that you can add and get <xref:common.room.ARoomMessageAlgoCmd>s from. Then, just pass this class to the mini-model and it's easy to lookup messages when clients ask for them!
 
@@ -229,7 +323,7 @@ this.setCmd(ICommandMessage.ID, new SimpleRoomCmd<ICommandMessage>() {
 ```
 Once someone sends you a command, it's easy to install it into your visitor. Remember our <xref:common.room.ICmd2LocalSystemAdapter> factory from before? That's where this comes in! You need to take care of two things.
 
-First, installing the command:
+#### 1. Installing the command
 ```java
 public void addNewCommand(IDataPacketID id, ARoomMessageAlgoCmd<?> cmd) {
     this.setCmd(id, new ARoomMessageAlgoCmd<>(){
@@ -248,4 +342,32 @@ public void addNewCommand(IDataPacketID id, ARoomMessageAlgoCmd<?> cmd) {
 
 This part can be a little confusing, so let's break it down. It does, in essence, three things
 1. Installs a command into our visitor to handle all future messages with the given ID.
-2. Whenever it receives a message with that ID, first creates an <xref:common.room.ICmd2LocalSystemAdapter> adapter using the factory supplied to the visitor. It takes in the sender's <xref:common.room.INamedMessageReceiver> to identify it. Then, 
+2. Whenever it receives a message with that ID, we create an <xref:common.room.ICmd2LocalSystemAdapter> using the factory supplied to the visitor. It takes in the sender's <xref:common.room.INamedMessageReceiver> to identify it.
+3. We pass that adapter to the unknown command, then we actually execute the command using it's `apply` method -- a simple delegation of our apply to `cmd`s apply.
+
+> [!WARNING]
+> You can run into multithreading issues here! It's a good idea to wrap the `apply` body in a `synchronized` statement locking on `cmd` so that if you get two messages at once you can process one at a time.
+
+#### 2. Executing pending messages
+After adding that message to your visitor, you should execute all pending messages that have the same `IDataPacketID`. This time they'll be processed correctly by the visitor
+
+> [!WARNING]
+> Be sure to use `.equals()` and not `==` when comparing `IDataPacketID`s, otherwise you may get unexpected results.
+
+## Leaving a chatroom
+To leave a chatroom, remove yourself from the PubSubSync roster, unsubscribe from the PubSubSync channel, and send an `IQuitRoomMessage` to the rest of the room, so they know you've left!
+
+## Conclusion
+And, that's it! You should now be chatting! If there's anything this guide misses, feel free to reach out to Team A to get it added!
+
+# Other Notes
+## Status Messages
+Certain well-known status messages exist to help keep apps updated about potential issues that may arise. They are as follows:
+
+| Message                   | Description                        | Recommended Action |
+|---------------------------|------------------------------------|--------------------|
+|`IRejectRoomMessage`       | Sent when the command for a well-known message type is requested | Hardcode a visitor cmd for the message ID |
+|`IErrorConnectionMessage`  | Sent when there was an error processing a connection-level message | Send the message again, but only so many times |
+|`IRejectConnectionMessage` | Sent when the remote refuses to process a sent message | Give up on whatever action you were trying to perform |
+
+## Tips and Traps

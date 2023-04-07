@@ -5,20 +5,18 @@ new ChatroomMessageExtendedVisitor(new IVisitorToModelAdapter() {
     // ...
 }, (sender) -> new ICmd2LocalSystemAdapter() {
     @Override
-    public void writeText(INamedMessageReceiver nmr, String text) {
-        viewAdapter.writeText(senderName.toString(), text);
+    public void writeText(String text) {
+        viewAdapter.writeText(sender.toString(), text);
     }
+
     @Override
-    public void writeImage(Image image) {
-        viewAdapter.writeImage(senderName.toString(), image);
+    public void log(LogLevel level, String message) {
+        viewAdapter.writeError(sender.toString(), level, message);
     }
-    @Override
-    public void writeError(String error) {
-        viewAdapter.writeError(senderName.toString(), error);
-    }
+
     @Override
     public void addComponent(Supplier<JComponent> componentSupplier) {
-        viewAdapter.addComponent(senderName.toString(), componentSupplier);
+        viewAdapter.addComponent(sender.toString(), componentSupplier);
     }
 });
 ```

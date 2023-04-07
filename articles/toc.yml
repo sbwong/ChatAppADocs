@@ -3,3 +3,7 @@
   href: getstarted.md
 - name: Sample ICmd2LocalSystemAdapter factory
   href: sampleadapterfactory.md
+- name: Sample Unknown Message Type
+  href: sampleadapterfactory.md
+- name: ITextMessage as an Unknown Message
+  href: textmessageunknown.md
