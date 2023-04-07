@@ -1,3 +1,5 @@
 - name: Getting Started Guide
   uid: getstarted
   href: getstarted.md
+- name: Sample ICmd2LocalSystemAdapter factory
+  href: sampleadapterfactory.md
