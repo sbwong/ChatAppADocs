@@ -6,7 +6,7 @@ Your first step on the path to chatting is setting up your connections so that y
 
 This takes place in a couple steps:
 ### Create your <xref:common.connection.IConnection> implementation.
-IConnection is, at the end of the day, the object that will receive all communcations from other apps. It has two methods you should override. One, `receiveMessage`, which will be called whenever another app sends you a message. Another, `setConnection` which will send you the <xref:common.connection.INamedConnection> of another party, establishing auto-connect back functionality. Here's what your implementation might look like:
+IConnection is the object that will receive all high-level, non-room specific communications from other apps. It has two methods you should override. One, `receiveMessage`, which will be called whenever another app sends you a message. Another, `setConnection` which will send you the <xref:common.connection.INamedConnection> of another party, establishing auto-connect back functionality. Here's what your implementation might look like:
 
 ```java
 public class AppConnection implements IConnection {
