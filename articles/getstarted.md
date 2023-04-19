@@ -325,25 +325,30 @@ Once someone sends you a command, it's easy to install it into your visitor. Rem
 
 #### 1. Installing the command
 ```java
+Map<IDataPacketID, List<RoomDataPacket<? extends IRoomMessage>>> unknownMsgCache = new HashMap<IDataPacketID, List<RoomDataPacket<? extends IRoomMessage>>>();
+
 public void addNewCommand(IDataPacketID id, ARoomMessageAlgoCmd<?> cmd) {
-    this.setCmd(id, new ARoomMessageAlgoCmd<>(){
-        @Override
-        public Void apply(IDataPacketID index, RoomDataPacket<IRoomMessage> host, Void... params) {
-            ICmd2LocalSystemAdapter cmdAdapter = cmdAdapterFactory.apply(host.getSender());
-            cmd.setCmd2ModelAdpt(cmdAdapter);
-            cmd.apply(index, host, params);
-            return null;
-        }
+    cmd.setCmd2ModelAdpt(cmdAdapter);
+    extendedVisitor.setCmd(id, cmd);
+    
+    // Get the cached datapackets for the index or an empty list if none and iterate through the list
+    unknownMsgCache.getOrDefault(id, List.of()).forEach((datapacket)->{
+        // optional: start a new thread here with a try-catch around each execution for greater safety
+        datapacket.execute(extendedVisitor);
     });
+    unknownMsgCache.remove(id);
+    
 
     // ...
 }
 ```
 
 This part can be a little confusing, so let's break it down. It does, in essence, three things
-1. Installs a command into our visitor to handle all future messages with the given ID.
-2. Whenever it receives a message with that ID, we create an <xref:common.room.ICmd2LocalSystemAdapter> using the factory supplied to the visitor. It takes in the sender's <xref:common.room.INamedMessageReceiver> to identify it.
-3. We pass that adapter to the unknown command, then we actually execute the command using it's `apply` method -- a simple delegation of our apply to `cmd`s apply.
+1. Sets the command's adapter to the local system
+2. Installs a command into our visitor to handle all future messages with the given ID.
+3. Retrieves all the cached datapackets for the given message ID or an empty list if none.
+4. Iterates through the list, processing each cached datapacket.
+5. Removes the cached entries for that ID from the cache.
 
 > [!WARNING]
 > You can run into multithreading issues here! It's a good idea to wrap the `apply` body in a `synchronized` statement locking on `cmd` so that if you get two messages at once you can process one at a time.
