@@ -15,7 +15,15 @@ public class AppConnection implements IConnection {
     @Override
     public void receiveMessage(ConnectionDataPacket<? extends IConnectionMessage> message) throws RemoteException {
         // we just got a message, execute it on our visitor
-        message.execute(this.extendedVisitor);
+        (new Thread(()->{
+            try {
+                message.execute(this.extendedVisitor);
+            } catch(Exception e) {
+                logger.log(LogLevel.ERROR, "[IConnection.receiveMessage()] Exception while processing received datapacket: "+e);
+                e.printStackTrace();
+                // Send failure status message back to message sender!
+            }
+        }).start();
     }
 }
 ```
